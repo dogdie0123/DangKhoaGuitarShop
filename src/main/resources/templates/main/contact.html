@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="no-js"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #main-content},
+                                                ${session.PersonalInformation}
+                                               )}"> 
+<head>
+        <title>Contact - Guitar Shop</title>
+</head>
+<body>
+<div id="main-content">
+    <!--================Contact Area =================-->
+    <section class="contact_area section_gap_bottom">
+
+        <div class="google_map_wrapper">
+            <iframe class="google_map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.7603717757756!2d106.65051621533415!3d10.752942462565786!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752e8b4d535ce3%3A0x6fec30bb4db51405!2zOTkyIE5ndXnhu4VuIFRyw6NpLCBQaMaw4budbmcgMTQsIFF14bqtbiA1LCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2sus!4v1556558305622!5m2!1svi!2sus" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="contact_wrapper container">
+            <div class="row ">
+                <div class="col-lg-5 contact_info" style="background: #313a3f">
+                    <h2>Contact</h2>
+                    <div class="info_detail">
+                        <div class="info_item row">
+                            <div class="col-1">
+                                <i class="fa fa-map-marker"></i>
+                            </div>
+                            <div class="col-11">
+                                <a>590 CMT8, W.14, D.3, TP. Hồ Chí Minh</a>
+                            </div>
+                        </div>
+                        <div class="info_item row">
+                            <div class="col-1">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="col-11">
+                                <a href="tel:(+84) 909 313 686" title="Call to (+84) 909 313 686">(+84) 33 505 6697</a>
+                            </div>
+                        </div>
+                        <div class="info_item row">
+                            <div class="col-1">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div class="col-11">
+                                <a href="mailto:info@guitarshop.com" title="Gửi email đến info@guitarshop.com">info@guitarshop.com</a>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                        <div class="info_item ">
+                            <h6>Social</h6>
+                            <a href="https://www.facebook.com/guitarshop"><i class="fa fa-facebook-f"></i></a>
+                            &nbsp;
+                            <a href="https://www.twitter.com/guitarshop"><i class="fa fa-twitter"></i></a>
+                            &nbsp;
+                            <a href="https://www.tumblr.com/guitarshop"><i class="fa fa-tumblr"></i></a>
+                            &nbsp;
+                            <a href="https://www.pinterest.com/guitarshop"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 contact_message">
+                    <h2>Send Message</h2>
+                    <form id="contactForm" action="">
+                        <div class="shipping_info">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Full name *</label>
+                                        <input type="text" class="form-control" id="name" name="name" />
+                                        <label class="validation-message" id="contactNameError"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email *</label>
+                                        <input type="email" class="form-control" id="email" name="email"/>
+                                        <label class="validation-message" id="contactEmailError"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" id="title" name="title" />
+                                <label class="validation-message" id="contactTitleError"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Message *</label>
+                                <textarea type="text" rows="5" class="form-control" id="messageContent" name="messageContent"></textarea>
+                                <label class="validation-message" id="contactContentError"></label>
+                            </div>
+                            <div class="login_form send_message row justify-content-end">
+                                <div class="form-group col-md-6">
+                                    <button type="submit" class="primary-btn" style="background: #313a3f">Gửi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================Contact Area =================-->
+
+    <dialog class="success_dialog">
+        <button type="button" class="close closeDialog" data-dismiss="modal" title="Đóng">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="dialog_wrapper">
+            <p>
+            <h4>Send message success!</h4>
+            </p>
+            <p>Thank you!</p>
+            <div class="dialog_navigation">
+                <a href="/" class="primary-btn">Home</a>
+            </div>
+        </div>
+    </dialog>        
+</div>
+</body>
+</html>

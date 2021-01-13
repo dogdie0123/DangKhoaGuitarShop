@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html th:replace="~{/_admin_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #content}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<title id="title">Admin | Manufacturer</title>
+<div id="content">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800" align="center">Manufacturer</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+                <a th:att href="/admin/createManufacturer" class="btn btn-success btn-icon-split">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-plus-square"></i>
+                    </span>
+                    <span class="text">Add Manufacturer</span>
+                </a>
+        </div>
+        <span th:if="${message}">
+            <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Note: </strong>[[${message}]].
+            </div>
+        </span>
+        <span th:if="${error}">
+            <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Note: </strong>[[${message}]].
+            </div>
+        </span>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">ID</th>
+                        <th style="text-align: center">Manufacturer Name</th>
+                        <th style="text-align: center">Country</th>
+                        <th style="text-align: center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${manufacturerList}">
+                        <td style="text-align: center" th:text="${c.id}"></td>
+                        <td th:text="${c.name}"></td>
+                        <td th:text="${c.country}"></td>
+                        <td align="center">
+                            <a th:href="@{'/updateManufacturer/' + ${c.id}}" class="btn btn-sm btn-info"
+                               title="Cập nhật Nhà SX">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a th:href="@{'/deleteManufacturer/' + ${c.id}}" onclick="if(!(confirm('Are you sure to delete this entry?'))) return false" class="btn btn-sm btn-danger"
+                               title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+
+<!-- End of Content Wrapper -->
+
+</html>

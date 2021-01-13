@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html th:replace="~{/_admin_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #content}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+<title id="title">Admin | Order</title>
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="content">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800" align="center">List Order</h1>
+    <div align="center">
+        <a th:classappend="${status == null ? 'btn btn-primary btn-lg' : 'btn btn-primary btn-sm'}" href="/admin/viewInvoices">All</a>
+        <a th:classappend="${status == '1' ? 'btn btn-warning btn-lg' : 'btn btn-warning btn-sm'}" href="/admin/viewInvoices?status=1">Pending</a>
+        <a th:classappend="${status == '2' ? 'btn btn-info btn-lg' : 'btn btn-info btn-sm'}" href="/admin/viewInvoices?status=2">Delivery</a></li>
+        <a th:classappend="${status == '3' ? 'btn btn-success btn-lg' : 'btn btn-success btn-sm'}" href="/admin/viewInvoices?status=3">Completed</a>
+        <a th:classappend="${status == '4' ? 'btn btn-danger btn-lg' : 'btn btn-danger btn-sm'}" href="/admin/viewInvoices?status=4">Canceled</a>
+    </div>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <span th:if="${message}">
+            <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Note: </strong>[[${message}]].
+            </div>
+        </span>
+        <span th:if="${error}">
+            <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Note: </strong>[[${message}]].
+            </div>
+        </span>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">ID</th>
+                        <th style="text-align: center">Email</th>
+                        <th style="text-align: center">Customer Name</th>
+                        <th style="text-align: center">Phone</th>
+                        <th style="text-align: center">Address</th>
+                        <th style="text-align: center">Status</th>
+                        <th style="text-align: center">Total</th>
+                        <th style="text-align: center">Created At</th>
+                        <th style="text-align: center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="i : ${invoiceList}">
+                        <td style="text-align: center" th:text="${i.id}"></td>
+                        <td th:text="${i.customerEmail}"></td>
+                        <td th:text="${i.customerName}"></td>
+                        <td th:text="${i.customerPhone}"></td>
+                        <td th:text="${i.customerAddress}"></td>
+                        <td style="text-align: center" th:classappend="${(i.status == 1 ? 'text-warning':'')
+                                            + (i.status == 2 ? 'text-info':'')
+                                            + (i.status == 3 ? 'text-success':'')
+                                            + (i.status == 4 ? 'text-danger':'')}"
+                            th:text="${i.getStatusByStatusId().getStatus()}"></td>
+                        <td style="text-align: center">[[${#numbers.formatDecimal(i.total, 0, 'COMMA', 0, 'POINT')}]]đ</td>
+                        <td style="text-align: center" th:text="${#dates.format(i.createdTime, 'dd-MM-yyyy')}"></td>
+                        <td align="center">
+                            <a th:href="@{'/admin/viewInvoiceDetail/' + ${i.id}}" class="btn btn-sm btn-info"
+                               title="Detail">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a th:href="@{'/admin/setInvoiceStatus/' + ${i.id} +'/?status=4'}" onclick="if(!(confirm('Are you sure to delete this entry?'))) return false" class="btn btn-sm btn-danger"
+                               title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+</body>
+<!-- End of Content Wrapper -->
+</html>

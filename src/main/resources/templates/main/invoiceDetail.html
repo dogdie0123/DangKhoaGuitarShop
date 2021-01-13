@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="no-js"
+      th:replace="~{/_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #main-content},
+                                                ${session.PersonalInformation}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Guitar Shop - Chi tiết đơn hàng</title>
+</head>
+<body>
+<div id="main-content">
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Chi tiết đơn hàng</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+    <!--================Login Box Area =================-->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row" style="justify-content: center; padding-top: 20px">
+                <div class="col-9" style="border-style: double; border-width: 7px" >
+                    <!-- Main content -->
+                    <div class="invoice p-3 mb-3">
+                        <!-- title row -->
+                        <div class="row">
+                            <div class="col-12" style="padding-bottom: 40px">
+                                <h4 style="text-align: center">
+                                    <strong><a style="font-size: xx-large; font-family:Courier New;" th:text="'=========== Invoice No.' + ${invoice.id}+' ==========='"></a></strong><br>
+                                </h4>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- info row -->
+                        <div class="row invoice-info" style="border-left-style:dotted;">
+                            <div class="col-sm-4 invoice-col">
+                                <strong>From: </strong>GuitarShop
+                                <address>
+                                    <strong>Address: </strong>590 CMT8, F.11, Q3, TP. HCM<br>
+                                    <strong>Phone: </strong> (033) 505-6697<br>
+                                    <strong>Email: </strong>: admin@GuitarShop.com
+                                </address>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 invoice-col" style="border-left-style:dotted;">
+                                <strong>To: </strong> [[${invoice.customerName}]]
+                                <address>
+                                    <strong>Address: </strong> [[${invoice.customerAddress}]]<br>
+                                    <strong>Phone: </strong> [[${invoice.customerPhone}]]<br>
+                                    <strong>Email: </strong> [[${invoice.customerEmail}]]
+                                </address>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 invoice-col" style="border-left-style:dotted;">
+                                <strong>Order ID: </strong><a th:text="${invoice.id}"></a><br>
+                                <strong>Order Date: </strong><a th:text="${#dates.format(invoice.createdTime, 'dd-MM-yyyy')}"></a><br>
+                                <strong>Payment Method: </strong><a th:text="${invoice.paymentMethod}"></a><br>
+                                <strong>Status: </strong><a style="font-weight: bold" th:classappend="${(invoice.status == 1 ? 'text-warning':'')
+                                            + (invoice.status == 2 ? 'text-info':'')
+                                            + (invoice.status == 3 ? 'text-success':'')
+                                            + (invoice.status == 4 ? 'text-danger':'')}"
+                                   th:text="${invoice.getStatusByStatusId().status}">
+                                </a>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+
+                        <!-- Table row -->
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align: center"></th>
+                                        <th style="text-align: center">Product Name</th>
+                                        <th style="text-align: center">Quantity</th>
+                                        <th style="text-align: center">Price</th>
+                                        <th style="text-align: center">Rate</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="i: ${invoiceDetails}">
+                                        <td style="text-align: center">
+                                            <img width="70" height="70" th:src="${i.getProductByIdProduct().getImagePath()}" alt="cart-image">
+                                        </td>
+                                        <td style="text-align: center"><a style="color: #0b0b0b; font-weight: bold" th:href="${'/chi-tiet/?id='+i.productByIdProduct.id}" th:text="${i.getProductByIdProduct().name}"></a></td>
+                                        <td style="text-align: center" th:text="${i.quantity}"></td>
+                                        <td style="text-align: center" th:text="${#numbers.formatDecimal(i.getProductByIdProduct().price, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
+                                        <td style="text-align: center">
+                                            <th:block th:if="${invoice.status!=3}">
+                                                <a class="text-danger" style="font-weight: bold;">Unavailable</a>
+                                            </th:block>
+                                            <th:block th:if="${invoice.status==3}">
+                                                <th:block th:if="${i.isReviewed()==false}">
+                                                    <a class="btn btn-warning btn-sm" style="font-weight: bold;"
+                                                       data-toggle="modal" id="invoiceId" data-target="#rateModal" th:action="${i.getInvoiceDetailIdentity().getIdInvoice()}" th:href="${i.getProductByIdProduct().getId()}" onclick="getId()">Rate this Product</a>
+                                                </th:block>
+                                                <th:block th:unless="${i.isReviewed()==false}">
+                                                    <a class="text-success" style="font-weight: bold;">Rated</a>
+                                                </th:block>
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <div class="row">
+                            <!-- accepted payments column -->
+                            <div class="col-6">
+
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-6">
+                                <p class="lead">Amount</p>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th style="width:50%">Subtotal:</th>
+                                            <td th:text="${#numbers.formatDecimal(invoice.total, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping:</th>
+                                            <td>Free</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total:</th>
+                                            <td th:text="${#numbers.formatDecimal(invoice.total, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.invoice -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <div class="modal fade" id="rateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Rate Product</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="Get" id="form">
+                        <div class="row" style="margin-left: 10px">
+                            <input type="hidden" id="iId" name="iId">
+                            <input type="hidden" id="pId" name="pId">
+                            <label for="star" style="font-weight: bold; padding-right: 10px">Rating: </label>
+                            <select id="star" name="star">
+                                <option value=1>⭐</option>
+                                <option value=2>⭐⭐</option>
+                                <option value=3>⭐⭐⭐</option>
+                                <option value=4>⭐⭐⭐⭐</option>
+                                <option selected value=5>⭐⭐⭐⭐⭐</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="row" style="margin-left: 10px">
+                            <label for="review" style="font-weight: bold; padding-right: 10px">Review: </label>
+                            <textarea id="review" name="review" rows="3" cols="50" placeholder="Write Review Here"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" onclick="submitRate()" type="submit" value="Submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--================End Login Box Area =================-->    
+    <script type="text/javascript">
+        function getId(){
+            var iId = document.getElementById("invoiceId").getAttribute("action");
+            var pId = document.getElementById("invoiceId").getAttribute("href");
+           console.log("iID=",iId);
+           console.log("pID=",pId);
+           document.getElementById("iId").setAttribute("value", iId);
+           document.getElementById("pId").setAttribute("value", pId);
+        }
+        function submitRate(){
+            document.getElementById("form").setAttribute("action","/rateProduct/");
+        }
+    </script>
+</div>
+</body>
+
+</html>

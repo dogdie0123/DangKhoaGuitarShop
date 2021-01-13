@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="no-js"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #main-content},
+                                                ${session.PersonalInformation}
+                                               )}"> 
+<head>
+        <title>Search result - Guitar Shop</title>
+</head>
+<body>
+<div id="main-content">
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Search result</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+
+    <section class="search_area section_gap">
+        <div class="container">
+            <div class="result_overview">
+                <th:block th:if="${#lists.isEmpty(pageListProduct.pageList)}">
+                <h4 th:text="'Cannot find any result!'"></h4>
+                <hr />
+                </th:block>
+            </div>
+            <th:block th:unless="${#lists.isEmpty(pageListProduct.pageList)}">
+                <h4 th:text="'result: '+${count}+' products'"></h4>
+                <hr />
+            <div class="result_list">
+                <div class="row">
+                    <!--/*@thymesVar id="result" type=""*/-->
+                    <th:block th:each="product : ${pageListProduct.pageList}">
+                        <a th:href="@{~/chi-tiet/(id=${product.id})}">
+                            <div class="col-lg-3 col-md-6 col-sm-4 col-6">
+                                <div class="single-product">
+                                    <img width="210" height="373" th:src="${product.getImagePath()}" alt="">
+                                    <div class="product-details s_product_text">
+                                        <h6 th:text="${product.name}">
+                                        </h6>
+                                        <div class="price">
+                                            <th:block th:if="${product.discountAmount}>0"
+                                                      th:with="discountPrice=${product.price}*(100 - ${product.discountAmount})/100">
+                                                <h6 th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                                <h6 class="l-through"
+                                                    th:text="${#numbers.formatDecimal(product.price,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                            </th:block>
+                                            <th:block th:unless="${product.discountAmount}>0">
+                                                <h6 th:text="${#numbers.formatDecimal(product.price,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                            </th:block>
+                                        </div>
+                                        <div class="prd-bottom card_area">
+                                            <a class="primary-btn" th:href="@{/add-to-cart(productId=${product.id}, quantity=1)}">Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+            <div class="filter-bar d-flex flex-wrap align-items-center justify-content-end">
+                <ul class="pagination">
+                    <th:block th:each="item : ${#numbers.sequence(beginPage, endPage)}">
+                        <li th:class="${item == currentPage ? 'active' : ''}">
+                            <a class="page-link" th:href="@{~/tim-kiem(tu-khoa=${tukhoa}, page=${item})}">
+                                <span th:text='${item}'></span>
+                            </a>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+            </th:block>
+    </section> 
+</div>
+</body>
+</html>

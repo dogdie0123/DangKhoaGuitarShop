@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="no-js"
+      th:replace="~{/_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #main-content},
+                                                ${session.PersonalInformation}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title id="title">Home - Guitar Shop</title>
+</head>
+<body>
+<div id="main-content">
+    <!-- Start banner Area -->
+    <section class="banner-area home_banner">
+        <div class="home_banner_wrapper">
+            <div class="banner_shop_name">
+                <h3>GuitarShop</h3>
+            </div>
+            <div class="banner_title">
+                <h1>Guitar Shop</h1>
+            </div>
+            <div class="banner_explore_button">
+                <a class="explore_btn" href="#most_discount_products">More</a>
+                <a class="contact_btn" href="/lien-he">Contact</a>
+            </div>
+        </div>
+    </section>
+    <!-- End banner Area -->
+    <!-- Start features Area -->
+    <section class="features-area section_gap">
+        <div class="container">
+            <div class="row features-inner">
+                <!-- single features -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-features">
+                        <div class="f-icon">
+                            <img alt="" th:src="@{/img/features/f-icon1.png}">
+                        </div>
+                        <h6>Free Transport Cost</h6>
+                        <p>For all order at Guitar Shop</p>
+                    </div>
+                </div>
+                <!-- single features -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-features">
+                        <div class="f-icon">
+                            <img alt="" th:src="@{/img/features/f-icon2.png}">
+                        </div>
+                        <h6>Change Delivery in a Month</h6>
+                        <p>For Technical Defective Products.</p>
+                    </div>
+                </div>
+                <!-- single features -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-features">
+                        <div class="f-icon">
+                            <img alt="" th:src="@{/img/features/f-icon3.png}">
+                        </div>
+                        <h6>Support 24/7</h6>
+                        <p>by multi socials.</p>
+                    </div>
+                </div>
+                <!-- single features -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-features">
+                        <div class="f-icon">
+                            <img alt="" th:src="@{/img/features/f-icon4.png}">
+                        </div>
+                        <h6>Convenient payment</h6>
+                        <p>Fast and Safe.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End features Area -->
+    <!-- Start Categories Area -->
+    <section class="category_area">
+        <div class="container">
+            <div class="categories_home row">
+                <th:block th:each="item:${categoryList}">
+                    <div class="col-md-4 single_category">
+                        <a href="#">
+                            <h3>[[${item.name}]] <i class="fa fa-angle-right"></i></h3>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+    <!-- End Categories Area -->
+    <!-- Start hot products Area -->
+    <section class="section_gap" id="most_discount_products">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="section-title">
+                        <h1>Hot Promotion products</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <th:block th:each="item:${mostDiscountProducts}">
+                    <a th:href="@{~/chi-tiet/(id=${item.id})}">
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="single-product">
+                                <img width="210" height="373" th:src="${item.getImagePath()}">
+                                <div class="product-details s_product_text">
+                                    <h6 th:text="${item.name}"></h6>
+                                    <div class="price">
+                                        <th:block th:with="discountPrice=${item.price}*(100 - ${item.discountAmount})/100">
+                                            <h6 th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                            <h6 class="l-through" th:if="${item.discountAmount}>0"
+                                                th:text="${#numbers.formatDecimal(item.price,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                        </th:block>
+                                    </div>
+                                    <div class="prd-bottom card_area">
+                                        <a class="primary-btn" th:href="@{/add-to-cart(productId=${item.id}, quantity=1)}">Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </th:block>
+            </div>
+        </div>
+    </section>
+    <!-- End hot products Area -->
+    <!-- Start newest products Area -->
+    <section>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="section-title">
+                        <h1>Latest Product</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <th:block th:each="item:${newestProducts}">
+                    <a th:href="@{~/chi-tiet/(id=${item.id})}">
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="single-product">
+                                <img width="210px" height="373px" th:src="${item.getImagePath()}">
+                                <div class="product-details s_product_text">
+                                    <h6 th:text="${item.name}"></h6>
+                                    <div class="price">
+                                        <th:block th:with="discountPrice=${item.price}*(100 - ${item.discountAmount})/100">
+                                            <h6 th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                            <h6 class="l-through" th:if="${item.discountAmount}>0"
+                                                th:text="${#numbers.formatDecimal(item.price,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                        </th:block>
+                                    </div>
+                                    <div class="prd-bottom card_area">
+                                        <a class="primary-btn" th:href="@{/add-to-cart(productId=${item.id}, quantity=1)}">Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </th:block>
+            </div>
+        </div>
+    </section>
+    <!-- End newest products Area -->        
+</div>
+</body>
+</html>

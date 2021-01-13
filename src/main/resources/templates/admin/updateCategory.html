@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html   th:replace="~{/_admin_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #content}
+                                               )}"
+        xmlns:th="http://www.thymeleaf.org">
+
+<title id="title">Admin | Update Category Product</title>
+<div id="content" align="center">
+
+    <h1 class="h3 mb-2 text-gray-800">Update Category Product</h1>
+    <form style="width: 50%" action="#" th:action="@{/saveCategory}" th:object="${category}" method="post" class="user">
+        <hr>
+        <div class="form-group">
+            <p>ID: </p>
+            <input type="text" th:field="*{id}" hidden class="form-control form-control-user">
+        </div>
+        <div class="form-group">
+            <p>Category Name: </p>
+            <input type="text" th:field="*{name}" class="form-control form-control-user" placeholder="Tên Danh mục"required="true" autofocus>
+        </div>
+        <div class="form-group">
+            <p>Metadata: </p>
+            <input type="text" th:field="*{metadata}" class="form-control form-control-user" placeholder="Metadata" pattern="[^' ']+" title="This field mustn't contain Space character" required="true">
+        </div>
+        <button type="submit" class="btn-lg btn-success" value="submit">Lưu</button>
+        <hr>
+    </form>
+</div>
+
+<!-- End of Content Wrapper -->
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="no-js"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="main-fragment (title, mainContent, PersonalInformation)">
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" th:href="@{/img/fav.png}">
+    <!-- meta character set -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Site Title -->
+    <title th:replace="${title}">Guitar Shop</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/linearicons.css}" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/themify-icons.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/nice-select.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/nouislider.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/ion.rangeSlider.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/ion.rangeSlider.skinFlat.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css">
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- Start Header Area -->
+<header class="header_area sticky-header">
+    <div class="main_menu">
+        <nav class="navbar navbar-expand-lg navbar-light main_box" style="height: fit-content">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+
+                <a class="navbar-brand logo_h" href="/"><img th:src="@{/img/logo.png}" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">Product &nbsp;<i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" th:href="@{~/san-pham/acoustic-guitars}">Acoustic Guitars</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{~/san-pham/classic-guitars}">Classic Guitars</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{~/san-pham/guitars-with-eq}">Guitars có EQ</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/lien-he">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">About us</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item" title="Search">
+                            <button class="search nav-link"><span class="fa fa-search" id="search"></span></button>
+                        </li>
+                        <li class="nav-item" title="Wishlish">
+                            <a href="/wish-list" class="cart nav-link">
+                                <span class="fas fa-star"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item" title="View Cart">
+                            <a href="/gio-hang" class="cart nav-link">
+                                <span class="fa fa-shopping-cart"></span>
+                                <div class="cart_item_count" th:text="${session.sessionCartNum}==null?'0':${session.sessionCartNum}">0</div>
+                            </a>
+                        </li>
+                        <li class="nav-item submenu dropdown" sec:authorize="isAnonymous()">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false"><span class="fa fa-user"></span></a>
+                            <ul>
+                                <li class="nav-item user_name"><a class="nav-link" href="/dang-nhap">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                    </a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/dang-ky}">
+                                    <i class="fas fa-user-plus"></i> Register
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item submenu dropdown" sec:authorize="isAuthenticated()">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                <h6 sec:authentication="name"></h6>
+                            </a>
+                            <ul>
+                                <li class="nav-item" style="margin-left: 0px">
+                                    <a class="nav-link" th:href="@{/profile}">
+                                        <i class="fa fa-id-card"></i> Profile
+                                    </a>
+                                </li>
+                                <li sec:authorize="hasAuthority('admin')" class="nav-item">
+                                    <a class="nav-link" th:href="@{/admin/viewInvoices}">
+                                        <i class="fas fa-chart-bar"></i> Management
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/viewOrders}">
+                                        <i class="fa fa-receipt"></i> Order
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/changePassword}">
+                                        <i class="fa fa-key"></i> Change Password
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/dang-xuat}">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <form action="search" th:attr="action=@{/tim-kiem}">
+        <div class="search_input" id="search_input_box">
+            <div class="container">
+                <div class="d-flex justify-content-between">
+                    <input type="text" name="tu-khoa" class="form-control" placeholder="Search keyword ..."/>
+                    <button type="submit" class="btn"></button>
+                    <span class="lnr lnr-cross" id="close_search" title="Close"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</header>
+<!-- End Header Area -->
+
+<!-- Main content -->
+<div th:replace="${mainContent}">Main content</div>
+<!-- End Main content -->
+
+<!-- Start footer Area -->
+<footer class="footer-area section_gap">
+    <div class="container">
+        <hr/>
+        <div class="footer_wrap">
+            <div class="row justify-content-center social_info">
+                <a href="#"><i class="fa fa-facebook-f"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa fa-tumblr"></i></a>
+                <a href="#"><i class="fa fa-pinterest"></i></a>
+            </div>
+            <div class="copyright_info">
+                    <span>
+                        &copy; GuitarShop 2020. All rights reserved.
+                        | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
+                            href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </span>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End footer Area -->
+
+<!-- JavaScript -->
+
+<script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/nouislider.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/rater.js}" charset="utf-8"></script>
+<script th:src="@{/js/jquery.unobtrusive-ajax.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/controllers/contact-controller.js}"></script>
+<script th:src="@{/js/controllers/cart-controller.js}"></script>
+<script th:src="@{/js/controllers/user-controller.js}"></script>
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/js/demo/datatables-demo.js"></script>
+
+</body>
+</html>

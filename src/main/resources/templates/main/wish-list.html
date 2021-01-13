@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html class="no-js"
+      th:replace="~{/_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #main-content},
+                                                ${session.PersonalInformation}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org"> 
+<head>
+        <title>Wish List Detail - Guitar Shop</title>
+</head>
+<body>
+<div id="main-content">
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Wish List Detail</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner" id="cart_content">
+                <th:block th:if="${session.sessionWishList}!=null">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Add To Cart</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="item:${session.sessionWishList}">
+                                <tr th:with="product=${item.getValue().getProduct()}">
+                                    <th:block th:with="discountPrice=${product.price}*(100 - ${product.discountAmount})/100">
+                                        <td>
+                                            <div class="media">
+                                                <img alt="" class="img-fluid" th:src="${product.getImagePath()}">
+                                                <div class="media-body">
+                                                    <a th:href="@{~/chi-tiet/id=${product.id}}">
+                                                        <h5 th:text="${product.name}"></h5>
+                                                    </a>
+                                                    <a class="delete_ite" th:href="@{/remove-from-wish-list(productId=${product.id})}">Remove</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h5 th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}"></h5>
+                                            <th:block  th:if="${product.discountAmount}>0">
+                                            <span class="l-through"
+                                                  th:text="${#numbers.formatDecimal(product.price,0,'POINT',0,'COMMA')+'đ'}"></span>
+                                                <span> | -[[${product.discountAmount}]]%</span>
+                                            </th:block>
+                                        </td>
+                                        <td>
+                                            <a class="primary-btn" th:href="@{/add-to-cart(productId=${product.id},quantity=1)}">Add to Cart</a>
+                                        </td>
+
+                                    </th:block>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr/>
+                </th:block>
+                <th:block th:if="${session.sessionWishList}==null">
+                    <div class="justify-content-center">
+                        <p>Your Wish List is empty. </p>
+                        <a class="primary-btn" href="/">Home</a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+</div>
+
+
+</body>
+</html>

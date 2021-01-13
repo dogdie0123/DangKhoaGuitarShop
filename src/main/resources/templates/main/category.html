@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html class="no-js"
+      th:replace="~{/_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #main-content},
+                                                ${session.PersonalInformation}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org"> 
+<head>
+        <title>Category - Guitar Shop</title>
+</head>
+<body>
+<div id="main-content">
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Category</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+    <div class="container product_list_container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar-filter mt-50 row">
+                    <div class="common-filter col-4 col-md-12">
+                        <div class="head">Brand</div>
+                        <form action="#">
+                            <ul>
+                                <li class="filter-list">
+                                    <a th:classappend="${mManufacturer == 'All' ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer='All', style=${mStyle}, minPrice=${mMinPrice}, maxPrice=${mMaxPrice})}">All</a>
+                                </li>
+                                <th:block th:each="item : ${manufacturerList}">
+                                    <li class="filter-list">
+                                        <a th:classappend="${mManufacturer == item ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${item}, style=${mStyle}, minPrice=${mMinPrice}, maxPrice=${mMaxPrice})}">[[${item}]]</a>
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="common-filter col-4 col-md-12">
+                        <div class="head">Style</div>
+                        <form action="#">
+                            <ul>
+                                <li class="filter-list">
+                                    <a th:classappend="${mStyle == 'All' ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style='All', minPrice=${mMinPrice}, maxPrice=${mMaxPrice})}">All</a>
+                                </li>
+                                <th:block th:each="item : ${styleList}">
+                                    <li class="filter-list">
+                                        <a th:classappend="${mStyle == item ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${item}, minPrice=${mMinPrice}, maxPrice=${mMaxPrice})}">[[${item}]] </a>
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="common-filter col-4 col-md-12">
+                        <div class="head">Price</div>
+                        <ul>
+                            <li class="filter-list"><a th:classappend="${mMinPrice == 0 && mMaxPrice == 10000000 ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=0, maxPrice=10000000)}">All</a></li>
+                            <li class="filter-list"><a th:classappend="${mMinPrice == 0 && mMaxPrice == 1000000 ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=0, maxPrice=1000000)}">Lower 1.000.000đ</a></li>
+                            <li class="filter-list"><a th:classappend="${mMinPrice == 1000000 && mMaxPrice == 3000000 ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=1000000, maxPrice=3000000)}">1.000.000đ - 3.000.000đ</a></li>
+                            <li class="filter-list"><a th:classappend="${mMinPrice == 3000000 && mMaxPrice == 5000000 ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=3000000, maxPrice=5000000)}">3.000.000đ - 5.000.000đ</a></li>
+                            <li class="filter-list"><a th:classappend="${mMinPrice == 5000000 && mMaxPrice == 7000000 ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=5000000, maxPrice=7000000)}">5.000.000đ - 7.000.000đ</a></li>
+                            <li class="filter-list"><a th:classappend="${mMinPrice == 7000000 && mMaxPrice == 10000000 ? 'active' : ''}" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=7000000, maxPrice=10000000)}">Greater 7.000.000đ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-8">
+                <th:block th:if="${#lists.isEmpty(pageListProduct.pageList)}">
+                    <h2>No Product</h2>
+                </th:block>
+
+                <th:block th:unless="${#lists.isEmpty(pageListProduct.pageList)}">
+                    <div class="row">
+                        <th:block th:each="item : ${pageListProduct.pageList}">
+                            <a th:href="@{~/chi-tiet/(id=${item.id})}">
+                                <div class="col-lg-4 col-md-6 col-sm-4 col-6">
+                                    <div class="single-product">
+                                        <img width="210" height="373" th:src="${item.getImagePath()}">
+                                        <div class="product-details s_product_text">
+                                            <h6 th:text="${item.name}"></h6>
+                                            <div class="price">
+                                                <th:block th:if="${item.discountAmount}>0"
+                                                          th:with="discountPrice=${item.price}*(100 - ${item.discountAmount})/100">
+                                                    <h6 th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                                    <h6 class="l-through"
+                                                        th:text="${#numbers.formatDecimal(item.price,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                                </th:block>
+                                                <th:block th:unless="${item.discountAmount}>0">
+                                                    <h6 th:text="${#numbers.formatDecimal(item.price,0,'POINT',0,'COMMA')+'đ'}"></h6>
+                                                </th:block>
+                                            </div>
+                                            <div class="prd-bottom card_area">
+                                                <a class="primary-btn" th:href="@{/add-to-cart(productId=${item.id}, quantity=1)}">Add to Cart</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </th:block>
+                    </div>
+                    <div class="filter-bar d-flex flex-wrap align-items-center justify-content-end">
+                        <ul class="pagination">
+                            <th:block th:each="item : ${#numbers.sequence(beginPage, endPage)}">
+                                <li th:class="${item == currentPage ? 'active' : ''}">
+                                    <a class="page-link" th:href="@{'~/san-pham/' + ${mMetadata}(manufacturer=${mManufacturer}, style=${mStyle}, minPrice=${mMinPrice}, maxPrice=${mMaxPrice}, page=${item})}">
+                                        <span th:text='${item}'></span>
+                                    </a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>        
+</div>
+</body>
+</html>

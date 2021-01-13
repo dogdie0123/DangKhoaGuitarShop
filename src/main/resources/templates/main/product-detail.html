@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html
+        class="no-js"
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{/_layout :: main-fragment( ~{::title}, ~{:: #main-content}, ${session.PersonalInformation} )}"> 
+
+<head>
+    <title>Product Detail - Guitar Shop</title>
+    <style>
+        .widget .panel-body {
+            padding: 0px;
+        }
+
+        .widget .list-group {
+            margin-bottom: 0;
+        }
+
+        .widget .panel-title {
+            display: inline
+        }
+
+        .widget .label-info {
+            float: right;
+        }
+
+        .widget li.list-group-item {
+            border-radius: 0;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .widget li.list-group-item:hover {
+            background-color: rgba(86, 61, 124, .1);
+        }
+
+        .widget .mic-info {
+            color: #666666;
+            font-size: 11px;
+        }
+
+        .widget .action {
+            margin-top: 5px;
+        }
+
+        .widget .comment-text {
+            font-size: 12px;
+        }
+
+        .widget .btn-block {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+
+        body {
+            padding-top: 30px;
+            margin-top: 20px;
+        }
+
+        .comment-wrapper .panel-body {
+            max-height: 650px;
+            /* overflow:auto; */
+        }
+
+        .comment-wrapper .media-list .media img {
+            /* width:64px; */
+            height: 64px;
+            border: 2px solid #e5e7e8;
+        }
+
+        .comment-wrapper .media-list .media {
+            border-bottom: 1px dashed #efefef;
+            margin-bottom: 25px;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="main-content">
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Product Detail</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+    <!--================Single Product Area =================-->
+    <div class="product_image_area">
+        <div class="container">
+            <div class="row s_product_inner">
+                <div class="col-md-6 col-lg-4">
+                    <div class="single-prd-item">
+                        <img alt="" class="img-fluid" th:src="${product.getImagePath()}">
+                    </div>
+                </div>
+                <div class="col-md-6 offset-lg-1">
+                    <div class="s_product_text">
+                        <h3 th:text="${product.getName()}"></h3>
+                        <div class="price">
+                            <th:block
+                                    th:with="discountPrice=${product.price}*(100 - ${product.discountAmount})/100">
+                                <h2 th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}"></h2>
+                                <h4 class="l-through" th:if="${product.discountAmount}>0"
+                                    th:text="${#numbers.formatDecimal(product.price,0,'POINT',0,'COMMA')+'đ'}"></h4>
+                            </th:block>
+                        </div>
+                        <ul class="list">
+                            <li><a><span>Type: </span> [[${product.getCategoryByIdCategory().getName()}]]</a>
+                            </li>
+                            <li>
+                                <th:block th:if="${product.quantity} == 0">
+                                    <a><span>Quantity: </span> <strong class="text-danger">Sold out</strong></a>
+                                </th:block>
+                                <th:block th:if="${product.quantity} != 0">
+                                    <a><span>Quantity: </span> [[${product.getQuantity()}]]</a>
+                                </th:block>
+                            </li>
+                            <li><a><span>Warranty: </span> [[${product.getWarrantyPeriod()}]]</a></li>
+                        </ul>
+                        <div class="social-button-group">
+                            <ul class="list">
+                                <li><i class="fab fa-facebook-f"></i></li>
+                                <li><i class="fab fa-twitter"></i></li>
+                                <li><i class="fab fa-tumblr"></i></li>
+                                <li><i class="fab fa-pinterest-p"></i></li>
+                            </ul>
+                        </div>
+                        <strong style="text-align: center">Description: </strong><p th:text="${product.getDescription()}"></p>
+                        <hr>
+                        <th:block th:if="${product.quantity !=0}">
+                            <div class="product_count">
+                                <label for="qty">Quantity:</label>
+                                <input class="input-text" id="max-qty" th:data-id="${product.getQuantity()}"
+                                       maxlength="12" name="max-qty" type="hidden" th:value="${product.getQuantity()}">
+                                <input class="input-text" id="qty" th:data-id="${product.id}" maxlength="12" name="qty"
+                                       type="number" readonly value="1">
+                                <button class="increase" onclick="var result = document.getElementById('qty'); var sst = +result.value;
+                                    var result2 = document.getElementById('max-qty'); var sst2 = +result2.value;
+                                     if( !isNaN( sst ) && sst < sst2) result.value++;return false;" type="button">
+                                    <i class="lnr lnr-chevron-up"></i>
+                                </button>
+                                <button class="reduced"
+                                        onclick="var result = document.getElementById('qty'); var sst = result.value; if( !isNaN( sst ) && sst > 1 ) result.value--;return false;"
+                                        type="button">
+                                    <i class="lnr lnr-chevron-down"></i>
+                                </button>
+                            </div>
+                        </th:block>
+                        <div class="card_area d-flex align-items-center">
+                            <th:block th:if="${product.quantity !=0}">
+                                <a class="primary-btn" href="#" id="add_to_cart">Add to Cart</a>
+                            </th:block>
+                            <a class="primary-btn" th:href="@{/add-to-wishlist(productId=${product.id})}">Wish
+                                List</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--================End Single Product Area =================-->
+    <!--================Product Description Area =================-->
+    <section class="product_description_area">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a aria-controls="review" aria-selected="false" class="nav-link active" data-toggle="tab"
+                       href="#review" id="review-tab" role="tab">Rating</a>
+                </li>
+                <li class="nav-item">
+                    <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab"
+                       href="#profile" id="profile-tab" role="tab">Specification</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div aria-labelledby="review-tab" class="tab-pane fade show active" id="review" role="tabpanel">
+                    <div class="row total_rate">
+                        <div class="col-lg-6">
+                            <div class="box_total">
+                                <h5>Average rating</h5>
+                                <h4><span id="average-rate">[[${AverageRate}]]/5</span></h4>
+                                <h6>(<span id="total-rate-1" th:text="${TotalRate}"></span> ratings)</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="rating_list">
+                                <h5>Based on <span id="total-rate-2" th:text="${TotalRate}"></span> ratings:
+                                </h5>
+                                <ul class="list">
+                                    <li>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        [[${ListCountRate[4]}]] ratings
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        [[${ListCountRate[3]}]] ratings
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        [[${ListCountRate[2]}]] ratings
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        [[${ListCountRate[1]}]] ratings
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        [[${ListCountRate[0]}]] ratings
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row"
+                         style="margin: 10px 50px 10px 50px;border-bottom: inset; border-width: 2px; vertical-align: middle"
+                         th:each="r : ${rateList}">
+                        <div class="col-sm-1" style="vertical-align: middle">
+                            <img src="/img/default_user.png" width="60px" height="60px">
+                        </div>
+                        <div class="col-sm-11">
+                            <a style="font-weight: bold" th:text="${r.name}"></a>
+                            <small style="float: right" th:text="${r.createdTime}"></small><br>
+                            <th:block th:switch="${r.numberOfStars}">
+                                <a th:case=1>⭐</a>
+                                <a th:case=2>⭐⭐</a>
+                                <a th:case=3>⭐⭐⭐</a>
+                                <a th:case=4>⭐⭐⭐⭐</a>
+                                <a th:case=5>⭐⭐⭐⭐⭐</a>
+                            </th:block>
+                            <br>
+                            <p th:text="${r.content}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div aria-labelledby="profile-tab" class="tab-pane fade" id="profile" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <h5>Style</h5>
+                                </td>
+                                <td>
+                                    <h5 th:text="${product.getStyle()}"></h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5>Brand</h5>
+                                </td>
+                                <td>
+                                    <h5 th:text="${product.getManufacturerByIdManufacturer().getName()}"></h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5>Country</h5>
+                                </td>
+                                <td>
+                                    <h5 th:text="${product.getManufacturerByIdManufacturer().getCountry()}">
+                                    </h5>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Product Description Area =================-->
+    <!-- Start related-product Area -->
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="comment-wrapper">
+                    <div class="panel panel-info">
+
+                        <div class="panel-body">
+                            <form method="POST" th:action="@{/comments}" th:object="${comment}">
+                                <div class="row">
+                                    <div class="form-group col-xs-6">
+                                        <label for="email" class="sr-only"></label>
+                                        <input id="email" class="form-control input-group-lg reg_name" type="email"
+                                               th:field="*{email}" title="Enter email" placeholder="Email" required/>
+                                    </div>
+
+                                    <div class="form-group col-xs-6">
+                                        <label for="lastname" class="sr-only"></label>
+                                        <input id="lastname" class="form-control input-group-lg reg_name"
+                                               type="text" th:field="*{name}" title="Enter name" placeholder="Name"
+                                               required/>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <textarea th:field="*{messageContent}" class="form-control"
+                                          placeholder="write a comment..." rows="3" required></textarea>
+                                <br>
+                                <input type="submit" class="btn btn-info pull-right">
+                            </form>
+                            <div class="clearfix"></div>
+                            <hr>
+                            <ul class="media-list" th:each="tempComment : ${ListComment}">
+                                <li>
+                                    <div class="row">
+                                        <div class="media-body col-md-12">
+                                                <span class="text-muted pull-right">
+                                                    <small type="date" class="text-muted"
+                                                           th:text="${#temporals.format(tempComment.createdTime, 'dd-MM-yyyy', new java.util.Locale('en', 'EN'))}"></small>
+                                                </span>
+                                            <strong class="text-success" th:text="${tempComment.name}"></strong>
+                                            <p th:text="${tempComment.messageContent}"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <section class="related-product-area section_gap_bottom">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="section-title">
+                        <h1>Related Products</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <th:block th:each="product:${ListRelativeProduct}">
+                    <a th:href="@{~/chi-tiet/(id=${product.id})}">
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="single-product">
+                                <img width="210" height="373" th:src="${product.getImagePath()}">
+                                <div class="product-details s_product_text">
+                                    <h6 th:text="${product.getName()}">
+                                    </h6>
+                                    <div class="price">
+                                        <th:block th:if="${product.discountAmount}>0"
+                                                  th:with="discountPrice=${product.price}*(100 -${product.discountAmount})/100">
+                                            <h6
+                                                    th:text="${#numbers.formatDecimal(discountPrice,0,'POINT',0,'COMMA')+'đ'}">
+                                            </h6>
+                                            <h6 class="l-through"
+                                                th:text="${#numbers.formatDecimal(product.price,0,'POINT',0,'COMMA')+'đ'}">
+                                            </h6>
+                                        </th:block>
+                                        <th:block th:unless="${product.discountAmount}>0">
+                                            <h6
+                                                    th:text="${#numbers.formatDecimal(product.price,0,'POINT',0,'COMMA')+'đ'}">
+                                            </h6>
+                                        </th:block>
+                                    </div>
+                                    <div class="prd-bottom card_area">
+                                        <a class="primary-btn"
+                                           th:href="@{/add-to-cart(productId=${product.id}, quantity=1)}">Add to
+                                            Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </th:block>
+
+            </div>
+        </div>
+    </section>
+    <!-- End related-product Area -->  
+</div>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html th:replace="~{/_admin_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #content}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<title id="title">Admin | Add Category</title>
+<div id="content" align="center">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Add New Category</h1>
+    <form style="width: 50%" th:action="@{/saveCategory}" th:object="${category}" method="post" class="user">
+        <hr>
+        <table style="width: 85%;border-collapse: separate; border-spacing: 0 15px;">
+            <tr>
+                <td><label>Category Name: </label></td>
+                <td><input type="text" th:field="*{name}" class="form-control form-control-user"
+                           placeholder="Tên Danh mục" required="true" autofocuss></td>
+            </tr>
+            <tr>
+                <td><label>Metadata: </label></td>
+                <td><input type="text" th:field="*{metadata}" pattern="[^' ']+" title="This field mustn't contain Space character" class="form-control form-control-user"
+                           placeholder="Metadata"
+                           required="true"></td>
+            </tr>
+            <tr align="center">
+                <td colspan="2">
+                    <button type="submit" class="btn-lg btn-success" value="submit">Add</button></td>
+            </tr>
+        </table>
+        <hr>
+    </form>
+</div>
+
+<!-- End of Content Wrapper -->
+
+</html>

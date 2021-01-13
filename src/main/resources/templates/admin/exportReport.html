@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html th:replace="~{/_admin_layout :: main-fragment(
+                                                ~{::title},
+                                                ~{:: #content}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title id="title">Report</title>
+</head>
+<body>
+<div id="content">
+    <h1 class="h3 mb-2 text-gray-800" align="center">Create Report</h1>
+    <hr>
+    <div class="col-6">
+        <label for="day">By Date:</label>
+        <input type="date" id="day" name="trip-start"
+               min="2020-01-01" max="2021-12-31">
+        <button type="button" onclick="getDate()" class="btn btn-primary">
+            <i class="fas fa-download"></i> Generate PDF
+        </button>
+    </div>
+    <div class="col-6">
+        <label for="startDate">From: </label>
+        <input type="date" id="startDate" name="trip-start"
+               min="2020-01-01" max="2021-12-31">
+        <label for="endDate">To: </label>
+        <input type="date" id="endDate" name="trip-start"
+               min="2020-01-01" max="2021-12-31">
+        <button type="button" onclick="getDateFromTo()" class="btn btn-primary">
+            <i class="fas fa-download"></i> Generate PDF
+        </button>
+    </div>
+    <script type="text/javascript">
+        function getDate() {
+            var date = document.getElementById("day").value;
+            if(date.length==0){
+                alert('Phải điền dữ liệu!!!')
+            }else{
+                location.href = '/admin/exportByDay/' + date;
+            }
+        }
+
+        function getDateFromTo() {
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+            if(startDate.length==0 || endDate.length==0) {
+                alert('Phải điền dữ liệu!!');
+            }else if(startDate >= endDate){
+                alert('Ngày bắt đầu phải trước ngày kết thúc!!!')
+            } else{
+                location.href = '/admin/exportFromTo/?startDate=' + startDate + '&endDate=' + endDate;
+            }
+        }
+    </script>
+
+</div>
+</body>
+<!-- End of Content Wrapper -->
+</html>
